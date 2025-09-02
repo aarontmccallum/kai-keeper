@@ -1,3 +1,5 @@
+import { save, load } from "./storage";
+
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -182,15 +184,24 @@ const TextArea = (props) => (
 
 // --------------------- App -------------------------------
 export default function KaiKeeperApp() {
-  const [plantTypes, setPlantTypes] = useState(() => loadLS(LS_KEYS.plantTypes, DEFAULT_PLANT_TYPES));
-  const [plantings, setPlantings] = useState(() => loadLS(LS_KEYS.plantings, /** @type {Planting[]} */([])));
-  const [harvests, setHarvests] = useState(() => loadLS(LS_KEYS.harvests, /** @type {Harvest[]} */([])));
+const [plantTypes, setPlantTypes] = useState(DEFAULT_PLANT_TYPES);
+const [plantings, setPlantings] = useState([]);
+const [harvests, setHarvests]   = useState([]);
 
-  const [tab, setTab] = useState("track"); // "plant" | "track" | "harvest" | "reports" | "settings"
 
-  useEffect(() => saveLS(LS_KEYS.plantTypes, plantTypes), [plantTypes]);
-  useEffect(() => saveLS(LS_KEYS.plantings, plantings), [plantings]);
-  useEffect(() => saveLS(LS_KEYS.harvests, harvests), [harvests]);
+
+const [tab, setTab] = useState("track"); // "plant" | "track" | "harvest" | "reports" | "settings"
+
+// Load once on startup
+useEffect(() => { load("plantTypes", DEFAULT_PLANT_TYPES).then(setPlantTypes); }, []);
+useEffect(() => { load("plantings", []).then(setPlantings); }, []);
+useEffect(() => { load("harvests", []).then(setHarvests); }, []);
+
+// Save whenever changes happen
+useEffect(() => { save("plantTypes", plantTypes); }, [plantTypes]);
+useEffect(() => { save("plantings", plantings); }, [plantings]);
+useEffect(() => { save("harvests",  harvests ); }, [harvests]);
+
 
   // -------- Derived maps --------
   const plantTypeById = useMemo(() => Object.fromEntries(plantTypes.map((p) => [p.id, p])), [plantTypes]);
