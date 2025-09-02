@@ -678,16 +678,37 @@ export default function KaiKeeperApp() {
     );
   };
 
-  // ---------------- Layout ----------------
-  const NavButton = ({ id, title, icon }) => (
-    <button
-      onClick={() => setTab(id)}
-      className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm ${tab === id ? "bg-emerald-600 text-white border-emerald-600" : "bg-white border-slate-200 hover:bg-slate-50"}`}
-    >
-      {icon}
-      <span>{title}</span>
-    </button>
-  );
+// ---------------- Layout ----------------
+const NavButton = ({ id, title, icon }) => (
+  <button
+    onClick={() => setTab(id)}
+    className={`flex items-center gap-2 px-3.5 py-3 md:py-2 rounded-xl border text-sm ${
+      tab === id
+        ? "bg-emerald-600 text-white border-emerald-600"
+        : "bg-white border-slate-200 hover:bg-slate-50"
+    }`}
+  >
+    {icon}
+    <span>{title}</span>
+  </button>
+);
+
+// Mobile bottom nav (only shows on small screens)
+const MobileNav = () => (
+  <nav
+    className="md:hidden fixed left-1/2 -translate-x-1/2 bottom-2 z-50 w-[min(640px,92%)] rounded-2xl border bg-white/95 shadow-lg backdrop-blur px-2 py-2"
+    style={{ paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 8px)` }}
+  >
+    <div className="grid grid-cols-5 gap-2">
+      <button onClick={() => setTab('plant')}   className={`flex flex-col items-center rounded-xl py-2 ${tab==='plant'   ?'bg-emerald-600 text-white':'text-slate-700 bg-slate-50'}`}><Plus className="w-4 h-4"/><span className="text-[10px] mt-1">Plant</span></button>
+      <button onClick={() => setTab('track')}   className={`flex flex-col items-center rounded-xl py-2 ${tab==='track'   ?'bg-emerald-600 text-white':'text-slate-700 bg-slate-50'}`}><Calendar className="w-4 h-4"/><span className="text-[10px] mt-1">Track</span></button>
+      <button onClick={() => setTab('harvest')} className={`flex flex-col items-center rounded-xl py-2 ${tab==='harvest' ?'bg-emerald-600 text-white':'text-slate-700 bg-slate-50'}`}><Leaf className="w-4 h-4"/><span className="text-[10px] mt-1">Harvest</span></button>
+      <button onClick={() => setTab('reports')} className={`flex flex-col items-center rounded-xl py-2 ${tab==='reports' ?'bg-emerald-600 text-white':'text-slate-700 bg-slate-50'}`}><BarChart3 className="w-4 h-4"/><span className="text-[10px] mt-1">Reports</span></button>
+      <button onClick={() => setTab('settings')}className={`flex flex-col items-center rounded-xl py-2 ${tab==='settings'?'bg-emerald-600 text-white':'text-slate-700 bg-slate-50'}`}><Edit3 className="w-4 h-4"/><span className="text-[10px] mt-1">Settings</span></button>
+    </div>
+  </nav>
+);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
